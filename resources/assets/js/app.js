@@ -6,21 +6,14 @@ import key from './components/key';
 // Register components
 Vue.component('key', key)
 
+// Vue app
 const audioContext = new AudioContext();
 const app = new Vue({
     el: '#app',
     data: {
         activeNotes: [],
-        notes: [],
-        keyMap: {},
-        context: audioContext,
-        waveType: 'sine',
-        gain: 0,
-        gainNode: audioContext.createGain()
-    },
-    created() {
-        // Hard code the order of keyboard keys for simplicity
-        [
+        keyValues: [
+            // Hard code the order of keyboard keys for simplicity
             [9, 'C4'],      //  tab
             [49, 'C#4'],    //  1
             [81, 'D4'],     //  q
@@ -34,7 +27,7 @@ const app = new Vue({
             [54, 'A#4'],    //  6
             [89, 'B4'],     //  y
             [85, 'C5'],     //  u
-            [56, 'C#5'],    //  8
+            [56, 'C#5'],    //  8pi
             [73, 'D5'],     //  i
             [57, 'D#5'],    //  9
             [79, 'E5'],     //  o
@@ -45,10 +38,19 @@ const app = new Vue({
             [221, 'A5'],    //  ]
             [8, 'A#5'],     //  del
             [220, 'B5'],    //  \
-        ].forEach((keyValue) => {
-            this.notes.push(keyValue[1]);
-            this.keyMap[keyValue[0]] = keyValue[1];
-        });
+        ],
+        notes: [],
+        keyMap: {},
+        context: audioContext,
+        waveType: 'sine',
+        gain: 0,
+        pitch: 4,
+        maxPitch: 8,
+        minPitch: 0,
+        gainNode: audioContext.createGain()
+    },
+    created() {
+        this.updateKeyValues();
         this.setupGain();
         document.addEventListener('keydown', this.keydown);
         document.addEventListener('keyup', this.keyup);
@@ -56,6 +58,20 @@ const app = new Vue({
     watch: {
         gain(value) {
             this.gainNode.gain.value = value;
+        },
+        pitch(toValue, fromValue) {
+            const change = (toValue - fromValue)    ;
+            let note;
+            let octave;
+
+            this.keyValues = this.keyValues.map(keyValue => {
+                note = keyValue[1];
+                octave = note.charAt(note.length - 1);
+                return [keyValue[0], note.replace(octave, parseInt(octave) + change)];
+            });
+        },
+        keyValues() {
+            this.updateKeyValues();
         }
     },
     methods: {
@@ -63,8 +79,29 @@ const app = new Vue({
             this.gain = .75;
             this.gainNode.connect(this.context.destination);
         },
+        updateKeyValues() {
+            this.activeNotes = [];
+            this.$nextTick(() => {
+                this.notes = [];
+                this.keyValues.forEach((keyValue) => {
+                    this.notes.push(keyValue[1]);
+                    this.keyMap[keyValue[0]] = keyValue[1];
+                });
+            });
+        },
         keydown(e) {
-            const note = this.keyMap[e.keyCode];
+            const code = e.keyCode;
+            const note = this.keyMap[code];
+            if (code === 38 && this.pitch !== this.maxPitch) {
+                // arrow up raises pitch
+                this.pitch = this.pitch + 1;
+                return true;
+            }
+            if (code === 40 && this.pitch !== this.minPitch) {
+                // arrow down lowers pitch
+                this.pitch = this.pitch - 1;
+                return true;
+            }
             if (!note) {
                 return true;
             }

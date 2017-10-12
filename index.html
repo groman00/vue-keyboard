@@ -62,6 +62,10 @@
                     <input v-model="gain" lazy type="range" min="0" max="5" step="0.1">
                 </label>
                 <label>
+                    Pitch
+                    <input v-model="pitch" lazy type="number" :min="minPitch" :max="maxPitch" step="1">
+                </label>
+                <label>
                     Sound Type
                     <select v-model="waveType">
                         <option>sine</option>
