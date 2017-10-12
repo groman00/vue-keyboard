@@ -11,22 +11,47 @@ const app = new Vue({
     el: '#app',
     data: {
         activeNotes: [],
+        notes: [],
+        keyMap: {},
         context: audioContext,
         waveType: 'sine',
         gain: 0,
         gainNode: audioContext.createGain()
     },
     created() {
+        // Hard code the order of keyboard keys for simplicity
+        [
+            [9, 'C4'],      //  tab
+            [49, 'C#4'],    //  1
+            [81, 'D4'],     //  q
+            [50, 'D#4'],    //  2
+            [87, 'E4'],     //  w
+            [69, 'F4'],     //  e
+            [52, 'F#4'],    //  4
+            [82, 'G4'],     //  r
+            [53, 'G#4'],    //  5
+            [84, 'A4'],     //  t
+            [54, 'A#4'],    //  6
+            [89, 'B4'],     //  y
+            [85, 'C5'],     //  u
+            [56, 'C#5'],    //  8
+            [73, 'D5'],     //  i
+            [57, 'D#5'],    //  9
+            [79, 'E5'],     //  o
+            [80, 'F5'],     //  p
+            [189, 'F#5'],   //  -
+            [219, 'G5'],    //  [
+            [187, 'G#5'],   //  =
+            [221, 'A5'],    //  ]
+            [8, 'A#5'],     //  del
+            [220, 'B5'],    //  \
+        ].forEach((keyValue) => {
+            this.notes.push(keyValue[1]);
+            this.keyMap[keyValue[0]] = keyValue[1];
+        });
+        this.setupGain();
         document.addEventListener('keydown', this.keydown);
         document.addEventListener('keyup', this.keyup);
-
-        this.setupGain();
-
-        // const currentTime = ;
-
-        // console.log(currentTime);
-
-
     },
     watch: {
         gain(value) {
@@ -38,18 +63,24 @@ const app = new Vue({
             this.gain = .75;
             this.gainNode.connect(this.context.destination);
         },
-        keydown({ keyCode }) {
-            console.log('up', keyCode);
-            const code = keyCode.toString();
-            if (!this.activeNotes.includes(code)) {
-                console.log('adding');
-                this.activeNotes.push(code)
+        keydown(e) {
+            const note = this.keyMap[e.keyCode];
+            if (!note) {
+                return true;
             }
-            return false;
+            e.preventDefault();
+            if (!this.activeNotes.includes(note)) {
+                console.log('up', note);
+                this.activeNotes.push(note)
+            }
         },
         keyup({ keyCode }) {
-            console.log('removing');
-            this.activeNotes.splice(this.activeNotes.findIndex(code => code.toString() === keyCode), 1);
+            const note = this.keyMap[keyCode];
+            if (!note) {
+                return true;
+            }
+            console.log('removing', note);
+            this.activeNotes.splice(this.activeNotes.findIndex(activeNote => activeNote === note), 1);
             return false;
         }
     }

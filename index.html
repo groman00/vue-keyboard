@@ -11,11 +11,69 @@
                 margin: 0;
                 padding: 0;
             }
+
+            .keyboard {
+                background-color: silver;
+                padding: 40px;
+                overflow-y: auto;
+            }
+
+            .key {
+                position: relative;
+                width: 75px;
+                border: solid black 1px;
+                height: 300px;
+                float: left;
+            }
+
+            .key.active{
+                background-color: rgba(0, 150, 255, 0.25);
+            }
+
+            .key > span {
+                position: absolute;
+                bottom: 20px;
+                left: 50%;
+                transform: translate3d(-50%, 0, 0);
+            }
+
+            .key-white {
+                background-color: white;
+            }
+
+            .key-white > span {
+                color: black;
+            }
+
+            .key-black {
+                background-color: black;
+            }
+
+            .key-black > span {
+                color: white;
+            }
         </style>
     </head>
     <body>
         <div id="app">
-            <key :context="context" note="67" :active-notes="activeNotes" :gain-node="gainNode" :wave-type="waveType"/>
+            <div class="controls">
+                <label>
+                    Volume
+                    <input v-model="gain" lazy type="range" min="0" max="5" step="0.1">
+                </label>
+                <label>
+                    Sound Type
+                    <select v-model="waveType">
+                        <option>sine</option>
+                        <option>square</option>
+                        <option>sawtooth</option>
+                        <option>triangle</option>
+                    </select>
+                </label>
+            </div>
+            <div class="keyboard">
+                <key v-for="note in notes" :context="context" :note="note" :active-notes="activeNotes" :gain-node="gainNode" :wave-type="waveType" :key="note"/>
+            </div>
         </div>
         <script src="/dist/js/bundle.js"></script>
     </body>
