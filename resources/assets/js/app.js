@@ -63,7 +63,6 @@ const app = new Vue({
             const change = (toValue - fromValue)    ;
             let note;
             let octave;
-
             this.keyValues = this.keyValues.map(keyValue => {
                 note = keyValue[1];
                 octave = note.charAt(note.length - 1);

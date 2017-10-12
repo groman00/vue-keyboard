@@ -10,24 +10,32 @@
             * {
                 margin: 0;
                 padding: 0;
+                box-sizing: border-box;
             }
 
             .keyboard {
-                background-color: silver;
+                display: inline-block;
+                background-color: #111;
+                background-image: linear-gradient(0deg, #333, #111);
+                border: solid 10px #333;
+                border-radius: 60px;
                 padding: 40px;
                 overflow-y: auto;
             }
 
             .key {
                 position: relative;
-                width: 75px;
-                border: solid black 1px;
-                height: 300px;
+                border: solid black 2px;
+                border-top: none;
+                border-bottom: none;
                 float: left;
+                border-radius: 10px;
+                margin-left: -25px;
             }
 
+
             .key.active{
-                background-color: rgba(0, 150, 255, 0.25);
+                background-color: #28acbd;
             }
 
             .key > span {
@@ -38,19 +46,31 @@
             }
 
             .key-white {
+                width: 75px;
+                height: 400px;
                 background-color: white;
             }
+
+            .key-white
 
             .key-white > span {
                 color: black;
             }
 
             .key-black {
+                width: 50px;
+                height: 250px;
                 background-color: black;
+                z-index: 1;
             }
 
             .key-black > span {
                 color: white;
+            }
+
+            .key-C,
+            .key-F {
+                margin-left: 0;
             }
         </style>
     </head>
@@ -76,7 +96,7 @@
                 </label>
             </div>
             <div class="keyboard">
-                <key v-for="note in notes" :context="context" :note="note" :active-notes="activeNotes" :gain-node="gainNode" :wave-type="waveType" :key="note"/>
+                <key v-for="note in notes" :class="'key-' + note.slice(0, note.length - 1)" :context="context" :note="note" :active-notes="activeNotes" :gain-node="gainNode" :wave-type="waveType" :key="note"/>
             </div>
         </div>
         <script src="/dist/js/bundle.js"></script>
