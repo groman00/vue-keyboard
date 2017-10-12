@@ -1,0 +1,16 @@
+{
+  "name": "vue-keyboard",
+  "version": "1.0.0",
+  "description": "A keyboard made with Vue js",
+  "main": "index.js",
+  "author": "groman00",
+  "license": "MIT",
+  "scripts": {
+    "start": "webpack-dev-server"
+  },
+  "dependencies": {
+    "vue": "^2.4.4",
+    "webpack": "^3.6.0",
+    "webpack-dev-server": "^2.9.1"
+  }
+}

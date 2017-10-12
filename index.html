@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Vue Keyboard</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style type="text/css">
+            * {
+                margin: 0;
+                padding: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <key :context="context" note="67" :active-notes="activeNotes" :gain-node="gainNode" :wave-type="waveType"/>
+        </div>
+        <script src="/dist/js/bundle.js"></script>
+    </body>
+</html>
