@@ -6,97 +6,36 @@
         <title>Vue Keyboard</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <style type="text/css">
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
-
-            .keyboard {
-                display: inline-block;
-                background-color: #111;
-                background-image: linear-gradient(0deg, #333, #111);
-                border: solid 10px #333;
-                border-radius: 60px;
-                padding: 40px;
-                overflow-y: auto;
-            }
-
-            .key {
-                position: relative;
-                border: solid black 2px;
-                border-top: none;
-                border-bottom: none;
-                float: left;
-                border-radius: 10px;
-                margin-left: -25px;
-            }
-
-
-            .key.active{
-                background-color: #28acbd;
-            }
-
-            .key > span {
-                position: absolute;
-                bottom: 20px;
-                left: 50%;
-                transform: translate3d(-50%, 0, 0);
-            }
-
-            .key-white {
-                width: 75px;
-                height: 400px;
-                background-color: white;
-            }
-
-            .key-white
-
-            .key-white > span {
-                color: black;
-            }
-
-            .key-black {
-                width: 50px;
-                height: 250px;
-                background-color: black;
-                z-index: 1;
-            }
-
-            .key-black > span {
-                color: white;
-            }
-
-            .key-C,
-            .key-F {
-                margin-left: 0;
-            }
-        </style>
+        <link rel="stylesheet" href="/dist/css/style.css">
     </head>
     <body>
         <div id="app">
-            <div class="controls">
-                <label>
-                    Volume
-                    <input v-model="gain" lazy type="range" min="0" max="5" step="0.1">
-                </label>
-                <label>
-                    Pitch
-                    <input v-model="pitch" lazy type="number" :min="minPitch" :max="maxPitch" step="1">
-                </label>
-                <label>
-                    Sound Type
-                    <select v-model="waveType">
-                        <option>sine</option>
-                        <option>square</option>
-                        <option>sawtooth</option>
-                        <option>triangle</option>
-                    </select>
-                </label>
-            </div>
             <div class="keyboard">
-                <key v-for="note in notes" :class="'key-' + note.slice(0, note.length - 1)" :context="context" :note="note" :active-notes="activeNotes" :gain-node="gainNode" :wave-type="waveType" :key="note"/>
+                <div class="controls">
+                    <label class="control">
+                        <div class="control-input">
+                            <input style="margin-top: 14px;" v-model="gain" lazy type="range" min="0" max="5" step="0.1">
+                        </div>
+                        <h2 class="control-label">Volume</h2>
+                    </label>
+                    <label class="control">
+                        <div class="control-input">
+                            <input class="pitch" v-model="pitch" lazy type="number" :min="minPitch" :max="maxPitch" step="1">
+                        </div>
+                        <h2 class="control-label">Pitch</h2>
+                    </label>
+                    <label class="control">
+                        <div class="control-input">
+                            <select v-model="waveType">
+                                <option v-for="type, i in waveTypes" :value="i" :key="i">{{ type }}</option>
+                            </select>
+                        </div>
+                        <h2 class="control-label">Sound Type</h2>
+                    </label>
+                </div>
+                <div class="keys">
+                    <key v-for="note in notes" :class="'key-' + note.slice(0, note.length - 1)" :context="context" :note="note" :active-notes="activeNotes" :gain-node="gainNode" :wave-type="waveTypes[waveType]" :key="note"/>
+                </div>
             </div>
         </div>
         <script src="/dist/js/bundle.js"></script>

@@ -42,7 +42,13 @@ const app = new Vue({
         notes: [],
         keyMap: {},
         context: audioContext,
-        waveType: 'sine',
+        waveType: 0,
+        waveTypes: [
+            'sine',
+            'square',
+            'sawtooth',
+            'triangle'
+        ],
         gain: 0,
         pitch: 4,
         maxPitch: 8,
@@ -91,16 +97,32 @@ const app = new Vue({
         keydown(e) {
             const code = e.keyCode;
             const note = this.keyMap[code];
-            if (code === 38 && this.pitch !== this.maxPitch) {
-                // arrow up raises pitch
-                this.pitch = this.pitch + 1;
-                return true;
+            switch (code) {
+                // arrow up, raise pitch
+                case 38:
+                    if (this.pitch !== this.maxPitch) {
+                        this.pitch += 1;
+                        return true;
+                    }
+                    break;
+                // arrow down, lower pitch
+                case 40:
+                    if (this.pitch !== this.minPitch) {
+                        this.pitch -= 1;
+                        return true;
+                    }
+                    break;
+                // arrow left, previous waveType
+                case 37:
+                    this.waveType = this.waveType === 0 ? this.waveTypes.length - 1 : this.waveType - 1;
+                    break;
+                // arrow right, next waveType
+                case 39:
+                    this.waveType = this.waveType === this.waveTypes.length - 1 ? 0 : this.waveType + 1;
+                    break;
+                default:
             }
-            if (code === 40 && this.pitch !== this.minPitch) {
-                // arrow down lowers pitch
-                this.pitch = this.pitch - 1;
-                return true;
-            }
+            console.log('key up');
             if (!note) {
                 return true;
             }
