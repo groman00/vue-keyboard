@@ -30,8 +30,9 @@
                                 <option v-for="type, i in waveTypes" :value="i" :key="i">{{ type }}</option>
                             </select>
                         </div>
-                        <h2 class="control-label">Sound Type</h2>
+                        <h2 class="control-label">Wave Type</h2>
                     </label>
+                    <div class="logo"></div>
                 </div>
                 <div class="keys">
                     <key v-for="note in notes" :class="'key-' + note.slice(0, note.length - 1)" :context="context" :note="note" :active-notes="activeNotes" :gain-node="gainNode" :wave-type="waveTypes[waveType]" :key="note"/>

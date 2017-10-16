@@ -14,7 +14,7 @@ export default {
         return {
             oscillator: null,
             isPlaying: false,
-            frequency: getFrequencyOfNote(this. note)
+            frequency: getFrequencyOfNote(this.note)
         };
     },
     computed: {
